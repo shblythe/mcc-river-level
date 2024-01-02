@@ -43,13 +43,13 @@ function App() {
     const isToday = (date) => {
         const today = new Date();
         console.log(today);
-        if (date.getDate() != today.getDate()) {
+        if (date.getDate() !== today.getDate()) {
             return false;
         }
-        if (date.getMonth() != today.getMonth()) {
+        if (date.getMonth() !== today.getMonth()) {
             return false;
         }
-        if (date.getYear() != today.getYear()) {
+        if (date.getYear() !== today.getYear()) {
             return false;
         }
         return true;
