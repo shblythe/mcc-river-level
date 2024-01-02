@@ -4,3 +4,4 @@ Calculates an estimate of the MCC river level gauge, based on the levels at the 
 
 Uses environment.data.gov.uk APIs to obtain river levels.
 
+Is deployed here: https://shblythe.github.io/mcc-river-level/
