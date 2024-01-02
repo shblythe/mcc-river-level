@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/mcc-river-level/static/css/main.f855e6bc.css",
+    "main.js": "/mcc-river-level/static/js/main.5498bcc3.js",
+    "static/js/787.d953f55b.chunk.js": "/mcc-river-level/static/js/787.d953f55b.chunk.js",
+    "index.html": "/mcc-river-level/index.html",
+    "main.f855e6bc.css.map": "/mcc-river-level/static/css/main.f855e6bc.css.map",
+    "main.5498bcc3.js.map": "/mcc-river-level/static/js/main.5498bcc3.js.map",
+    "787.d953f55b.chunk.js.map": "/mcc-river-level/static/js/787.d953f55b.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.f855e6bc.css",
+    "static/js/main.5498bcc3.js"
+  ]
+}
