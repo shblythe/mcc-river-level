@@ -1,7 +1,8 @@
 import './App.css';
 import React, { useEffect, useState } from 'react';
 
-import { backendFetch } from './backend';
+import { backendFetch } from './lib/backend';
+import { formattedDateFromString } from './lib/datetime';
 
 function App() {
     const [compstallHeight, setCompstallHeight] = useState(0);
@@ -39,33 +40,6 @@ function App() {
         }
         fetchData();
     },[]);
-
-    const isToday = (date) => {
-        const today = new Date();
-        console.log(today);
-        if (date.getDate() !== today.getDate()) {
-            return false;
-        }
-        if (date.getMonth() !== today.getMonth()) {
-            return false;
-        }
-        if (date.getYear() !== today.getYear()) {
-            return false;
-        }
-        return true;
-    }
-
-    const timeOnly = (date) => {
-        return date.getHours()+":"+date.getMinutes();
-    }
-
-    const formattedDateFromString = (dateString) => {
-        const date=new Date(dateString);
-        if (isToday(date)) {
-            return timeOnly(date);
-        }
-        return dateString;
-    }
 
     return (
         <div className="App" align="center">
