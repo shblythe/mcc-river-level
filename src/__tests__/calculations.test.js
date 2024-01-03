@@ -1,4 +1,5 @@
 import { calcMccHeight, calcTrend } from '../lib/calculations';
+import { NorthEast, SouthEast, East } from '@mui/icons-material';
 
 test('calculates correct height with both sources zero', () => {
     expect(calcMccHeight(0.0, 0.0)).toBeCloseTo(0.0);
@@ -38,9 +39,9 @@ test('calculates correct height with arbitrary values', () => {
 });
 
 test('calculates correct trend strings', () => {
-    const up = '↗';
-    const down = '↘';
-    const steady = '→';
+    const up = <NorthEast/>;
+    const down = <SouthEast/>;
+    const steady = <East/>;
 
     expect(calcTrend(0.0, 0.1)).toEqual(down);
     expect(calcTrend(0.1, 0.0)).toEqual(up);

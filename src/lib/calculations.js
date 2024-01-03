@@ -1,3 +1,4 @@
+import { SouthEast, NorthEast, East } from '@mui/icons-material';
 export const calcMccHeight = (marpleBridgeHeight, compstallHeight) => {
     var goytFactor = 0.0;
     if (marpleBridgeHeight >= 0.2) {
@@ -16,10 +17,10 @@ export const calcMccHeight = (marpleBridgeHeight, compstallHeight) => {
 
 export const calcTrend = (currentValue, prevValue) => {
     if (currentValue > prevValue) {
-        return "↗";
+        return <NorthEast/>;
     } else if (currentValue < prevValue) {
-        return "↘";
+        return <SouthEast/>;
     }
-    return "→";
+    return <East/>;
 }
 

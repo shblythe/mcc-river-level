@@ -3,6 +3,8 @@ import App from '../App';
 
 test('renders title', () => {
   render(<App />);
-  const linkElement = screen.getByText(/manchester canoe club river level/i);
-  expect(linkElement).toBeInTheDocument();
+  const titleElement = screen.getByText(/manchester canoe club/i);
+  const subTitleElement = screen.getByText(/river level/i);
+  expect(titleElement).toBeInTheDocument();
+  expect(subTitleElement).toBeInTheDocument();
 });

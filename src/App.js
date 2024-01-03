@@ -1,5 +1,7 @@
 import './App.css';
 import React, { useEffect, useState } from 'react';
+import Typography from '@mui/material/Typography';
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
 
 import { backendFetch } from './lib/backend';
 import { formattedDateFromString } from './lib/datetime';
@@ -14,6 +16,7 @@ function App() {
     const [marpleBridgeTrend, setMarpleBridgeTrend] = useState('');
     const [mccHeight, setMccHeight] = useState(0);
     const [mccTrend, setMccTrend] = useState('');
+    const [dataFetched, setDataFetched] = useState(false);
     useEffect(() => {
         async function fetchData() {
             const compstall = await backendFetch('id/stations/692190/readings?_sorted&_limit=2');
@@ -34,43 +37,49 @@ function App() {
             const prevMccHeight = calcMccHeight(marpleBridgeHeightPrev, compstallHeightPrev);
             setMccHeight(currentMccHeight);
             setMccTrend(calcTrend(currentMccHeight, prevMccHeight));
+            setDataFetched(true);
         }
         fetchData();
     },[]);
 
     return (
         <div className="App" align="center">
-            <h2>Manchester Canoe Club River Level</h2>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Station</th>
-                        <th>Reading</th>
-                        <th></th>
-                        <th>Taken at</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>Etherow, Compstall</td>
-                        <td>{compstallHeight.toFixed(2)} m</td>
-                        <td>{compstallTrend}</td>
-                        <td>{formattedDateFromString(compstallDateTime)}</td>
-                    </tr>
-                    <tr>
-                        <td>Goyt, Marple Bridge</td>
-                        <td>{marpleBridgeHeight.toFixed(2)} m</td>
-                        <td>{marpleBridgeTrend}</td>
-                        <td>{formattedDateFromString(marpleBridgeDateTime)}</td>
-                    </tr>
-                    <tr>
-                        <td>MCC gauge (estimate)</td>
-                        <td>{mccHeight.toFixed(1)}</td>
-                        <td>{mccTrend}</td>
-                        <td></td>
-                    </tr>
-                </tbody>
-            </table>
+            <Typography variant="h4">Manchester Canoe Club</Typography>
+            <Typography variant="h4">River Level</Typography>
+            { dataFetched && 
+                <TableContainer>
+                    <Table style={{ maxWidth: 440, margin: 'auto' }} aria-label="simple table">
+                        <TableHead>
+                            <TableRow>
+                                <TableCell>Station</TableCell>
+                                <TableCell>Reading</TableCell>
+                                <TableCell></TableCell>
+                                <TableCell>Taken at</TableCell>
+                            </TableRow>
+                        </TableHead>
+                        <TableBody>
+                            <TableRow>
+                                <TableCell>Etherow, Compstall</TableCell>
+                                <TableCell>{compstallHeight.toFixed(2)} m</TableCell>
+                                <TableCell>{compstallTrend}</TableCell>
+                                <TableCell>{formattedDateFromString(compstallDateTime)}</TableCell>
+                            </TableRow>
+                            <TableRow>
+                                <TableCell>Goyt, Marple Bridge</TableCell>
+                                <TableCell>{marpleBridgeHeight.toFixed(2)} m</TableCell>
+                                <TableCell>{marpleBridgeTrend}</TableCell>
+                                <TableCell>{formattedDateFromString(marpleBridgeDateTime)}</TableCell>
+                            </TableRow>
+                            <TableRow>
+                                <TableCell>MCC gauge (estimate)</TableCell>
+                                <TableCell>{mccHeight.toFixed(1)}</TableCell>
+                                <TableCell>{mccTrend}</TableCell>
+                                <TableCell></TableCell>
+                            </TableRow>
+                        </TableBody>
+                    </Table>
+                </TableContainer>
+            }
         </div>
     );
 }
