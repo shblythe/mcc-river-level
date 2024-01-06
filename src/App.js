@@ -165,7 +165,7 @@ function App() {
                                     position: { vertical: 'bottom' }
                                 }
                             }}
-                            margin={{ top: 0, bottom: 80 }}
+                            margin={{ top: 20, bottom: 80 }}
                         />
                     </Fragment>
                 }
