@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/mcc-river-level/static/css/main.d342b728.css",
-    "main.js": "/mcc-river-level/static/js/main.593ed16e.js",
+    "main.js": "/mcc-river-level/static/js/main.261fb391.js",
     "static/js/787.d953f55b.chunk.js": "/mcc-river-level/static/js/787.d953f55b.chunk.js",
     "static/media/roboto-latin-500-normal.woff2": "/mcc-river-level/static/media/roboto-latin-500-normal.f25d774ecfe0996f8eb5.woff2",
     "static/media/roboto-latin-700-normal.woff2": "/mcc-river-level/static/media/roboto-latin-700-normal.227c93190fe7f82de3f8.woff2",
@@ -61,11 +61,11 @@
     "static/media/roboto-greek-ext-700-normal.woff": "/mcc-river-level/static/media/roboto-greek-ext-700-normal.249853776d22a271b2b5.woff",
     "index.html": "/mcc-river-level/index.html",
     "main.d342b728.css.map": "/mcc-river-level/static/css/main.d342b728.css.map",
-    "main.593ed16e.js.map": "/mcc-river-level/static/js/main.593ed16e.js.map",
+    "main.261fb391.js.map": "/mcc-river-level/static/js/main.261fb391.js.map",
     "787.d953f55b.chunk.js.map": "/mcc-river-level/static/js/787.d953f55b.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.d342b728.css",
-    "static/js/main.593ed16e.js"
+    "static/js/main.261fb391.js"
   ]
 }
