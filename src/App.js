@@ -18,60 +18,66 @@ function App() {
     const [mccHeight, setMccHeight] = useState(0);
     const [mccTrend, setMccTrend] = useState('');
     const [dataFetched, setDataFetched] = useState(false);
+    const [dataError, setDataError] = useState(false);
     const [chartData, setChartData] = useState({});
     const [maxYAxis, setMaxYAxis] = useState(0);
     const [minYAxis, setMinYAxis] = useState(0);
     const NUM_READINGS=192;
     useEffect(() => {
         async function fetchData() {
-            const compstall = await backendFetch(`id/stations/692190/readings?_sorted&_limit=${NUM_READINGS}`);
-            const compstallHeightValue = compstall['items'][0]['value'];
-            const compstallHeightPrev = compstall['items'][1]['value'];
-            setCompstallHeight(compstallHeightValue);
-            setCompstallDateTime(compstall['items'][0]['dateTime']);
-            setCompstallTrend(calcTrend(compstallHeightValue, compstallHeightPrev));
+            setDataError(false);
+            try {
+                const compstall = await backendFetch(`id/stations/692190/readings?_sorted&_limit=${NUM_READINGS}`);
+                const compstallHeightValue = compstall['items'][0]['value'];
+                const compstallHeightPrev = compstall['items'][1]['value'];
+                setCompstallHeight(compstallHeightValue);
+                setCompstallDateTime(compstall['items'][0]['dateTime']);
+                setCompstallTrend(calcTrend(compstallHeightValue, compstallHeightPrev));
 
-            const marpleBridge = await backendFetch(`id/stations/692370/readings?_sorted&_limit=${NUM_READINGS}`);
-            const marpleBridgeHeightValue=marpleBridge['items'][0]['value'];
-            const marpleBridgeHeightPrev=marpleBridge['items'][1]['value'];
-            setMarpleBridgeHeight(marpleBridgeHeightValue);
-            setMarpleBridgeDateTime(marpleBridge['items'][0]['dateTime']);
-            setMarpleBridgeTrend(calcTrend(marpleBridgeHeightValue, marpleBridgeHeightPrev));
+                const marpleBridge = await backendFetch(`id/stations/692370/readings?_sorted&_limit=${NUM_READINGS}`);
+                const marpleBridgeHeightValue=marpleBridge['items'][0]['value'];
+                const marpleBridgeHeightPrev=marpleBridge['items'][1]['value'];
+                setMarpleBridgeHeight(marpleBridgeHeightValue);
+                setMarpleBridgeDateTime(marpleBridge['items'][0]['dateTime']);
+                setMarpleBridgeTrend(calcTrend(marpleBridgeHeightValue, marpleBridgeHeightPrev));
 
-            const currentMccHeight = calcMccHeight(marpleBridgeHeightValue, compstallHeightValue);
-            const prevMccHeight = calcMccHeight(marpleBridgeHeightPrev, compstallHeightPrev);
-            setMccHeight(currentMccHeight);
-            setMccTrend(calcTrend(currentMccHeight, prevMccHeight));
-            setDataFetched(true);
+                const currentMccHeight = calcMccHeight(marpleBridgeHeightValue, compstallHeightValue);
+                const prevMccHeight = calcMccHeight(marpleBridgeHeightPrev, compstallHeightPrev);
+                setMccHeight(currentMccHeight);
+                setMccTrend(calcTrend(currentMccHeight, prevMccHeight));
+                setDataFetched(true);
 
-            const chartReadings={};
-            for (let i=0; i<NUM_READINGS; i++) {
-                let dateTime = compstall['items'][i]['dateTime'];
-                if (chartReadings[dateTime] === undefined) {
-                    chartReadings[dateTime] = {dateTime: new Date(dateTime)};
+                const chartReadings={};
+                for (let i=0; i<NUM_READINGS; i++) {
+                    let dateTime = compstall['items'][i]['dateTime'];
+                    if (chartReadings[dateTime] === undefined) {
+                        chartReadings[dateTime] = {dateTime: new Date(dateTime)};
+                    }
+                    chartReadings[dateTime]['compstall']=compstall['items'][i]['value'];
+                    dateTime = marpleBridge['items'][i]['dateTime'];
+                    if (chartReadings[dateTime] === undefined) {
+                        chartReadings[dateTime] = {dateTime: new Date(dateTime)};
+                    }
+                    chartReadings[dateTime]['marpleBridge']=marpleBridge['items'][i]['value'];
                 }
-                chartReadings[dateTime]['compstall']=compstall['items'][i]['value'];
-                dateTime = marpleBridge['items'][i]['dateTime'];
-                if (chartReadings[dateTime] === undefined) {
-                    chartReadings[dateTime] = {dateTime: new Date(dateTime)};
+                const chartArray=Object.values(chartReadings);
+                const finalChartArray = [];
+                let maxYAxis = 0;
+                let minYAxis = 99;
+                for (let entry of chartArray) {
+                    if (entry['compstall'] !== undefined && entry['marpleBridge'] !== undefined) {
+                        entry['mcc'] = calcMccHeight(entry['marpleBridge'], entry['compstall']);
+                        finalChartArray.push(entry);
+                        maxYAxis = Math.max(maxYAxis, entry['mcc']/10.0, entry['marpleBridge'], entry['compstall']);
+                        minYAxis = Math.min(minYAxis, entry['mcc']/10.0, entry['marpleBridge'], entry['compstall']);
+                    }
                 }
-                chartReadings[dateTime]['marpleBridge']=marpleBridge['items'][i]['value'];
+                setChartData(finalChartArray);
+                setMaxYAxis(Math.round(maxYAxis*10.0)/10.0+0.1);
+                setMinYAxis(Math.round(minYAxis*10.0)/10.0-0.1);
+            } catch {
+                setDataError(true);
             }
-            const chartArray=Object.values(chartReadings);
-            const finalChartArray = [];
-            let maxYAxis = 0;
-            let minYAxis = 99;
-            for (let entry of chartArray) {
-                if (entry['compstall'] !== undefined && entry['marpleBridge'] !== undefined) {
-                    entry['mcc'] = calcMccHeight(entry['marpleBridge'], entry['compstall']);
-                    finalChartArray.push(entry);
-                    maxYAxis = Math.max(maxYAxis, entry['mcc']/10.0, entry['marpleBridge'], entry['compstall']);
-                    minYAxis = Math.min(minYAxis, entry['mcc']/10.0, entry['marpleBridge'], entry['compstall']);
-                }
-            }
-            setChartData(finalChartArray);
-            setMaxYAxis(Math.round(maxYAxis*10.0)/10.0+0.1);
-            setMinYAxis(Math.round(minYAxis*10.0)/10.0-0.1);
         }
         fetchData();
     },[]);
@@ -99,7 +105,9 @@ function App() {
             <Stack style={{ maxWidth: 440, margin: 'auto' }} >
                 <Typography variant="h4">Manchester Canoe Club</Typography>
                 <Typography variant="h4">River Level</Typography>
-                { dataFetched && 
+                { dataError && <Typography variant="h5" color="red">Temporarily unable to retrieve river levels from Environment Agency</Typography>
+                }
+                { dataFetched &&
                     <Fragment>
                         <TableContainer>
                             <Table size="small" aria-label="simple table">
